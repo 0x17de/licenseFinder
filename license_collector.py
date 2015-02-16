@@ -23,17 +23,21 @@ class LicenseCollector:
 
         bestSameLineScoreLicense = (0, '')
         for licensename in self.data:
-            score = 0
+            score = 0.0
+            lines = 0.0
             for line in self.licenseLines[licensename]:
+                if line == '':
+                    continue
+                lines += 1.0
                 if line in s:
-                    score += 1
-            score /= len(self.licenseLines[licensename])
+                    score += 1.0
+            score /= lines
             if score > bestSameLineScoreLicense[0]:
                 bestSameLineScoreLicense = (score, licensename)
         if bestSameLineScoreLicense[1] == '':
             bestSameLineScoreLicense = None
 
-        bestDiffScoreLicense = (0.1, '')
+        bestDiffScoreLicense = (0, '')
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write('\n'.join(splitBuffer).encode('ASCII', 'ignore'))
             tmp.flush()
@@ -47,7 +51,8 @@ class LicenseCollector:
                     except subprocess.CalledProcessError as e:
                         out = e.output
                     score = float(out)/len(self.licenseLines[licensename]) # ratio of changes to original license file
-                    if score < bestDiffScoreLicense[0]:
+                    score = 1.0 - score # 100% if no changes
+                    if score > bestDiffScoreLicense[0]:
                         bestDiffScoreLicense = (score, licensename)
         if bestDiffScoreLicense[1] == '':
             bestDiffScoreLicense = None
