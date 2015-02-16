@@ -51,22 +51,24 @@ def run():
 
     startIndex = 1
 
-    for k,v in enumerate(argv[startIndex:]):
-        if v[0] == '-':
+    for arg in argv[startIndex:]:
+        if arg[0] == '-':
             startIndex += 1
-            if v[1] == 'a':
+            if arg[1] == 'a':
                 aggressiveEnabled = True
-            if v[1] == 'h':
+            if arg[1] == 'h':
                 printHelp = True
-            if v[1] == '-':
+            if arg[1] == '-':
                 break
         else:
             break
 
     if printHelp:
         print("=== Help page ===")
+        print("./{program} [options...] [files...]")
         print("-h   Prints this help")
         print("-a   Aggressive mode - Scan every text file.")
+        print("--   Only files are following.")
         return
 
     args = argv[startIndex:]
