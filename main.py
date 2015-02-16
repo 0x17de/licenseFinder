@@ -49,14 +49,19 @@ def run():
     printHelp = False
     aggressiveEnabled = False
 
-    for k,v in enumerate(argv[1:]):
+    startIndex = 1
+
+    for k,v in enumerate(argv[startIndex:]):
         if v[0] == '-':
+            startIndex += 1
             if v[1] == 'a':
                 aggressiveEnabled = True
             if v[1] == 'h':
                 printHelp = True
             if v[1] == '-':
-                printHelp = True
+                break
+        else:
+            break
 
     if printHelp:
         print("=== Help page ===")
@@ -64,7 +69,7 @@ def run():
         print("-a   Aggressive mode - Scan every text file.")
         return
 
-    args = argv[1:]
+    args = argv[startIndex:]
     for arg in args:
         print("=== Scanning path \"{0}\" ===".format(arg))
         try:
