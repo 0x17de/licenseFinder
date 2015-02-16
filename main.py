@@ -59,6 +59,8 @@ def run():
             if arg[1] == 'h':
                 printHelp = True
             if arg[1] == '-':
+                if len(arg) > 2:
+                    printHelp = True
                 break
         else:
             break
